@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/commons::head"></head>
+
+<header  th:replace="fragments/commons::nav"></header>
+<body>
+<div class="container-fluid bg-blur">
+    <div class="row no-gutter mgcls">
+        <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+        <div class="col-md-8 col-lg-6">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto">
+
+                            <form th:object="${exerciseModel}" th:action="@{/exercise/add}"  th:method="POST">
+
+                                <h3 class="login-heading mb-4">Exercise is the key!</h3>
+
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('exName')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="name">Name</label>
+                                    <input th:field="*{exName}"  id="name" type="text" name="name" class="form-control" placeholder="Name" required autofocus minlength="4" maxlength="30" >
+                                </div>
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('sets')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+
+                                <div class="form-label-group">
+                                    <label for="sets">Number of sets</label>
+                                    <input th:field="*{sets}" type="number" id="sets" name="sets" class="form-control" placeholder="Sets" required autofocus>
+                                </div>
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('weight')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="weight">Weights</label>
+                                    <input th:field="*{weight}" type="number" id="weight" name="weight" class="form-control" placeholder="Weight" required autofocus>
+                                </div>
+                                <br>
+
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('imageUrl')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="imageUrl">Image Url</label>
+                                    <input th:field="*{imageUrl}" type="text" id="imageUrl" name="imageUrl" class="form-control" placeholder="ImageUrl" required autofocus>
+                                </div>
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('bodyGroup')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="bodyGroup">Part of the body</label>
+                                    <div class="mx-auto mb-1" th:each="e : ${#fields.errors('bodyGroup')}">
+                                        <small th:text="${e}" class="text-danger"></small>
+                                    </div>
+                                    <select th:field="*{bodyGroup}"  id="bodyGroup" name="bodyGroup" class="custom-select form-control" required>
+                                        <option value="" selected>Select body group</option>
+                                        <option
+                                                th:each="g : ${T(com.ex.FitApp.models.entities.enums.BodyGroup).values()}"
+                                                th:value="${g}"
+                                                th:text="${g}">Select body group</option>
+                                    </select>
+                                </div>
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('description')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="description">Description of the exercise</label>
+                                    <textarea minlength="0" maxlength=400 th:field="*{description}" style="min-height: 200px;" type="text" id="description" name="description" class="form-control" placeholder="Description"></textarea>
+                                </div>
+
+                            <br>
+                            <br>
+                                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Add your exercise!</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<footer th:replace="fragments/commons::footer"></footer>
+</html>

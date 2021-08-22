@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head"></head>
+
+<header  th:replace="fragments/commons::nav"></header>
+
+<body style="background-color: rgba(228,92,92,0.7); height: 800px;">
+<div class="row p-2 w-100 h-100 d-flex justify-content-center">
+
+    <div th:object="${usersDetails}" th:o class="table-responsive rounded col-md-11" style="border: white solid thin;">
+        <h1 style="color: white;">All users</h1>
+        <table class="table table-striped" style="color: white">
+            <thead >
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+            </tr>
+                <div th:each="user : ${usersDetails}">
+                    <tr>
+                      <th scope="col" th:value="${user.username}" th:text="${user.username}">Username</th>
+                      <th scope="col" th:value="${user.firstName}" th:text="${user.firstName}">First Name</th>
+                      <th scope="col" th:value="${user.lastName}" th:text="${user.lastName}">Last Name</th>
+                      <th scope="col" th:value="${user.email}"  th:text="${user.email}" >Email</th>
+                      <th scope="col"></th>
+                    </tr>
+                </div>
+            </thead>
+            <tbody id="all-students"></tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

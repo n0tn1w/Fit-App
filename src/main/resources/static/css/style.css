@@ -1,0 +1,119 @@
+nav{
+    background-color: rgb(46,134,253);
+}
+
+.my-index-div {
+    min-height: 56.6vh;
+    max-height: 100%;
+}
+
+main {
+    min-height: 90.2vh;
+}
+
+/*.my-register-div {*/
+/*    min-height: 85.5vh;*/
+/*    max-height: 100%;*/
+/*}*/
+
+footer {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(228,92,92,0.7);
+}
+
+.bg-blur {
+    background-color: rgb(192,192,192);
+    z-index: 2;
+    width: 100%;
+}
+
+body {
+    background-image: url(/images/background.jpg);
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100%;
+}
+
+#all-articles-jumbotron {
+    background-image: url("/images/instruments.jpg");
+    background-position: center;
+}
+
+input:valid {
+    border: lawngreen solid 2px;
+}
+
+input:invalid{
+    border: red solid 2px;
+}
+
+input:invalid:required{
+    background-image: linear-gradient(to right, rgb(214,234,248), rgb(46,134,253));
+}
+
+h2{
+    font-size: 2.5rem;
+}
+
+.car-shadow {
+    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.8);
+    border-radius: 20px;
+}
+
+.log-ops-article {
+    display: flex;
+    color: #fff;
+    font-size: 20px;
+    width: 100%;
+    justify-content: center;
+    background: rgb(46,134,253);
+    border-radius: 10px;
+    padding: 10px 0px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.log-ops-article p {
+    margin-top: 12px;
+}
+
+.log-ops-btn {
+    color: #fff;
+    font-size: 20px;
+    background: transparent;
+    margin: 0px 20px;
+    border: 1px solid #fff;
+    border-radius: 15px;
+    height: 70px;
+    width: 150px;
+    outline: none;
+}
+
+.log-ops-btn a {
+    text-decoration: none;
+    color: #fff;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.log-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.log-title {
+    color: rgb(255, 0, 0);
+}
+
+.log-subtitle {
+    font-style: italic;
+}
+
+
+.home-main {
+    display: flex;
+}

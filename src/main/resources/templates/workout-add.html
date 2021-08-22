@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/commons::head"></head>
+
+<header  th:replace="fragments/commons::nav"></header>
+<body>
+<div class="container-fluid bg-blur">
+<div class="row no-gutter mgcls">
+    <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+    <div class="col-md-8 col-lg-6">
+        <div class="login d-flex align-items-center py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9 col-lg-8 mx-auto">
+
+                        <form th:object="${workoutModel}" th:action="@{/workout/add}"  th:method="POST">
+
+                            <h3 class="login-heading mb-4">Time for a workout!</h3>
+
+                            <div class="mx-auto mb-1" th:each="e : ${#fields.errors('workoutName')}">
+                                <small th:text="${e}" class="text-danger"></small>
+                            </div>
+                            <div class="form-label-group">
+                                <label for="workoutName">Name</label>
+                                <input th:field="*{workoutName}"  id="workoutName" type="text" name="workoutName" class="form-control" placeholder="Workout Name" required autofocus minlength="4" maxlength="30" >
+                            </div>
+                            <br>
+
+                            <div class="mx-auto mb-1" th:each="e : ${#fields.errors('duration')}">
+                                <small th:text="${e}" class="text-danger"></small>
+                            </div>
+                            <div class="form-label-group">
+                                <label for="duration">Duration of the workout</label>
+                                <input th:field="*{duration}" type="number" id="duration" name="duration" class="form-control" placeholder="Duration" required autofocus>
+                            </div>
+                            <br>
+
+                            <div class="mx-auto mb-1" th:each="e : ${#fields.errors('description')}">
+                                <small th:text="${e}" class="text-danger"></small>
+                            </div>
+                            <div class="form-label-group">
+                                <label for="description">Description of the workout</label>
+                                <textarea minlength="0" maxlength=400 th:field="*{description}" style="min-height: 200px;" type="text" id="description" name="description" class="form-control" placeholder="Description"></textarea>
+                            </div>
+                            <br>
+
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('exercisesNames')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                     <label for="exercises">Exercises</label>
+                                <select th:field="${workoutModel.exercisesNames}" style="min-height: 150px;" class="form-control" id="exercises" name="exercises" multiple="multiple" required>
+                                    <option th:each="exercise : ${exerciseModel}" th:value="${exercise.exName}" th:text="|${exercise.exName} (${exercise.sets})|"></option>
+                                </select>
+
+
+
+                            <br>
+                            <br>
+                            <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Add workout!</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<footer th:replace="fragments/commons::footer"></footer>
+</html>

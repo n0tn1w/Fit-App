@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head"></head>
+
+<header  th:replace="fragments/commons::nav"></header>
+
+<body style="background-color: rgba(228,92,92,0.7); height: 800px;">
+<div class="row p-2 w-100 h-100 d-flex justify-content-center">
+
+    <div th:object="${workouts}" th:o class="table-responsive rounded col-md-11" style="border: white solid thin;">
+        <h1 style="color: white;">All workouts</h1>
+        <table class="table table-striped" style="color: white">
+            <thead >
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Exercises</th>
+                <th scope="col"></th>
+            </tr>
+            <div th:each="workout : ${workouts}">
+                <tr>
+                    <th scope="col" th:value="${workout.id}" th:text="${workout.id}">Username</th>
+                    <th scope="col" th:value="${workout.workoutName}" th:text="${workout.workoutName}">First Name</th>
+                    <th scope="col" th:value="${workout.duration}" th:text="${workout.duration}">Last Name</th>
+
+                    <th scope="col">
+                        <div th:each="e: ${workout.exercises}"
+                        th:value="${e}"
+                        th:text="${e}"> Exercise</div>
+                    </th>
+                    <th scope="col">
+                        <a style="color: black" class="resource-link mt-4" th:href="@{/workout/all/delete/{id}(id=${workout.id})}" >Delete Workout</a>
+                    </th>
+                </tr>
+            </div>
+            </thead>
+            <tbody id="all-students"></tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

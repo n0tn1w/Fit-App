@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head"></head>
+
+<header  th:replace="fragments/commons::nav"></header>
+
+<body class="bg-blur ">
+        <div class="d-flex justify-content-center p-5 ">
+<!--            <div class="p-5 bg-blur text-center">-->
+            <form th:object="${contactUsModel}" th:action="@{/contact-us}"  th:method="POST">
+
+                <h3 class="login-heading mb-4 ">Contact us here!</h3>
+
+
+                <div class="form-label-group p-2 " style="width: 200px; align-content: center">
+                    <div class="mx-auto mb-1" th:each="e : ${#fields.errors('username')}">
+                        <small th:text="${e}" class="text-danger"></small>
+                    </div>
+                    <label for="username">Username</label>
+                    <input th:field="*{username}"  id="username" type="text" name="username" class="form-control" placeholder="Username" required autofocus >
+                </div>
+
+                <div class="form-label-group p-2 "  style="width: 200px; align-content: center">
+                    <div class="mx-auto mb-1 " th:each="e : ${#fields.errors('email')}">
+                        <small th:text="${e}" class="text-danger"></small>
+                    </div>
+
+                    <label for="email">Email</label>
+                    <input th:field="*{email}" type="text" id="email" name="email" class="form-control" placeholder="Email" required autofocus minlength="4" maxlength="30">
+                </div>
+
+                <div class="p-7" style="width: 500px">
+                    <div class="mx-auto mb-1" th:each="e : ${#fields.errors('message')}">
+                        <small th:text="${e}" class="text-danger"></small>
+                    </div>
+                    <div class="form-label-group">
+                        <label for="message">Message</label>
+                        <textarea minlength="10" maxlength=400 th:field="*{message}" style="min-height: 200px;" type="text" id="message" name="message" class="form-control" placeholder="Message"></textarea>
+                    </div>
+                </div>
+
+                <br>
+                <br>
+                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Send message!</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+<footer th:replace="fragments/commons::footer"></footer>
+</html>

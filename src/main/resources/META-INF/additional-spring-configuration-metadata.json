@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "carousel.images",
+      "type": "java.lang.String",
+      "description": "Description for carousel.images."
+  }
+] }

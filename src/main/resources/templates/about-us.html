@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<head th:replace="fragments/commons::head"></head>
+
+<header  th:replace="fragments/commons::nav"></header>
+
+<!-- Content section -->
+<section class="py-5">
+    <div class="container" style="background-attachment: fixed;">
+        <h1>Who are we?</h1>
+        <p style="font-size: 20px">Im a guy with a dream that one day the world can be a better place for all of us.</p>
+    </div>
+</section>
+
+<section class="py-5 mt-5">
+    <div class="container">
+        <h1>Our teachers</h1>
+        <div class="mt-5">
+            <table>
+                <div>
+                    <h3 style="float: right">-Leet developer</h3>
+                    <tr>
+                        <img class="rounded-circle"
+                             th:src="@{/images/admin.png}"
+                             style="width: 200px; height: 200px;"/>
+                    </tr>
+                    <tr>
+                        <h1 class="rounded p-2 mb-5">Daniel Manchevski</h1>
+                    </tr>
+
+                </div>
+                <div>
+                    <h3 style="float: right">-Personal couch with long career in bodybuilding.</h3>
+                    <tr>
+                        <img class="rounded-circle"
+                             th:src="@{/images/ronny.jpg}"
+                             style="width: 200px; height: 200px;"/>
+                    </tr>
+                    <tr>
+                        <h1 class="rounded p-2 mb-5">Ronnie Coleman</h1>
+                    </tr>
+                </div>
+            </table>
+        </div>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container">
+        <h1>Our goal</h1>
+        <p style="font-size: 20px" >Our goal is to help as much people as possible . We all have dreams.
+        But in order to make dreams come into reality, it takes an awful lot of determination, dedication,
+        self-discipline and effort.</p>
+    </div>
+</section>
+
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+</html>

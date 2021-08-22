@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/commons::head"></head>
+<header  th:replace="fragments/commons::nav"></header>
+<body>
+
+<div class="container-fluid bg-blur">
+    <div class="row no-gutter">
+        <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+        <div class="col-md-8 col-lg-6">
+            <div class="d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto">
+                            <h3 class="login-heading mb-4">Hello ! Join our team now!</h3>
+
+                            <form th:action="@{/users/register}" th:object="${registerModel}"  th:method="POST">
+
+
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('firstName')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="firstName">FirstName</label>
+                                    <input th:field="*{firstName}"  id="firstName" type="text" name="firstName" class="form-control" placeholder="First Name" required autofocus minlength="4" maxlength="30" >
+                                </div>
+
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('lastName')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="lastName">LastName</label>
+                                    <input th:field="*{lastName}" type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required autofocus minlength="4" maxlength="30">
+                                </div>
+
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('username')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="username">Username</label>
+                                    <input th:field="*{username}" type="text" id="username" name="username" class="form-control" placeholder="Username" required minlength="4" maxlength="30">
+                                </div>
+
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('email')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="email">Email
+                                    </label>
+                                    <input th:field="*{email}" type="email" id="email" name="email" class="form-control" placeholder="Email address" required>
+                                </div>
+
+                                <br>
+                               <div class="mx-auto mb-1" th:each="e : ${#fields.errors('password')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="password">Password</label>
+                                    <input th:field="*{password}" type="password" id="password" name="password" class="form-control" placeholder="Password" required minlength="4" maxlength="30">
+                                </div>
+
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('confirmPassword')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="confirmPassword">Confirm password</label>
+                                    <input th:field="*{confirmPassword}" type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm password" required>
+                                </div>
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('age')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="age">Age</label>
+                                    <input th:field="*{age}" type="number" id="age" name="age" class="form-control" placeholder="Age" required>
+                                </div>
+
+
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('weight')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="weight">Weight in kg</label>
+                                    <input th:field="*{weight}" type="number" step="0.1" id="weight" name="weight" class="form-control" placeholder="Weight" required>
+                                </div>
+
+                                <br>
+                                <div class="mx-auto mb-1" th:each="e : ${#fields.errors('height')}">
+                                    <small th:text="${e}" class="text-danger"></small>
+                                </div>
+                                <div class="form-label-group">
+                                    <label for="height">Height in metres</label>
+                                    <input th:field="*{height}" type="number" step="0.1" id="height" name="height" class="form-control" placeholder="Height" required>
+                                </div>
+
+                                <br>
+                                <div class="form-label-group">
+                                    <label for="bodyType">Body Type</label>
+                                    <div class="mx-auto mb-1" th:each="e : ${#fields.errors('bodyType')}">
+                                        <small th:text="${e}" class="text-danger"></small>
+                                    </div>
+                                    <select th:field="*{bodyType}"  id="bodyType" name="bodyType" class="custom-select form-control">
+                                        <option value="" selected>Body Type</option>
+                                        <option
+                                                th:each="g : ${T(com.ex.FitApp.models.entities.enums.BodyType).values()}"
+                                                th:value="${g}"
+                                                th:text="${g}">Select body type</option>
+                                    </select>
+                                </div>
+
+                                <br>
+                                <br>
+                                <div>
+                                    <button style="background-color:rgba(228,92,92,0.7);border: 2px rgba(228,92,92,0.7) " class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Create account!</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+<footer th:replace="fragments/commons::footer"></footer>
+</html>

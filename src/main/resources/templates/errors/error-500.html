@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Something happened!</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,700" rel="stylesheet">
+    <link th:href="@{/css/user-404.css}" type="text/css" rel="stylesheet">
+    <th:block th:include="fragments/commons::head"/>
+</head>
+<body>
+<th:block th:include="fragments/commons::nav"/>
+<div id="notfound">
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1>Ops!</h1>
+            <h2>Something happened on our end</h2>
+        </div>
+        <h2 class="text-center">Ronnie is on his way to resolving the issue :D</h2>
+        <a th:href="@{/home}">Go home!</a>
+    </div>
+</div>
+<th:block th:include="fragments/commons::footer"/>
+</body>
+</html>

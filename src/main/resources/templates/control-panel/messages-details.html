@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head"></head>
+
+<header  th:replace="fragments/commons::nav"></header>
+
+<body style="background-color: rgb(153, 204 ,255); height: 800px;">
+<div class="row p-2 w-100 h-100 d-flex justify-content-center">
+
+    <div th:object="${messageDetails}" th:o class="table-responsive rounded col-md-11" style="border: white solid thin;">
+        <h1 style="color: white;">All messages</h1>
+        <table class="table table-striped" style="color: white">
+            <thead >
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Message</th>
+                <th scope="col"></th>
+            </tr>
+            <div th:each="message : ${messageDetails}">
+                <tr>
+                    <th scope="col" th:value="${message.id}" th:text="${message.id}">Username</th>
+                    <th scope="col" th:value="${message.username}" th:text="${message.username}">First Name</th>
+                    <th scope="col" th:value="${message.email}" th:text="${message.email}">Last Name</th>
+                    <th scope="col" th:value="${message.message}"  th:text="${message.message}" >Email</th>
+                    <th scope="col">
+                        <a class="resource-link mt-4" th:href="@{/control-panel/messages-details/delete/{id}(id=${message.id})}" >Delete Message</a>
+                    </th>
+                </tr>
+            </div>
+            </thead>
+            <tbody id="all-students"></tbody>
+        </table>
+        <form th:action="@{/control-panel/messages-details/delete/all}" method="GET">
+            <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" >Delete All!</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
