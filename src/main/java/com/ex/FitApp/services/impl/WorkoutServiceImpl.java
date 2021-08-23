@@ -2,8 +2,8 @@ package com.ex.FitApp.services.impl;
 
 import com.ex.FitApp.models.bindings.WorkoutAddBinding;
 import com.ex.FitApp.models.entities.ExerciseEntity;
-import com.ex.FitApp.models.entities.UserEntity;
 import com.ex.FitApp.models.entities.WorkoutEntity;
+import com.ex.FitApp.models.views.WorkoutDetailsView;
 import com.ex.FitApp.models.views.WorkoutView;
 import com.ex.FitApp.repositories.UserRepository;
 import com.ex.FitApp.repositories.WorkoutRepository;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,6 +82,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public void deleteById(Long messageId) {
         this.workoutRepository.deleteById(messageId);
+    }
+
+    public WorkoutDetailsView findById(Long workoutId) {
+        WorkoutDetailsView view= this.modelMapper.map(workoutRepository.findById(workoutId).orElse(null), WorkoutDetailsView.class);
+        return view;
     }
 
 

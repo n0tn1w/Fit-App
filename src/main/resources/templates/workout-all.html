@@ -2,44 +2,48 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/commons::head"></head>
-
 <header  th:replace="fragments/commons::nav"></header>
 
-<body style="background-color: rgba(228,92,92,0.7); height: 800px;">
-<div class="row p-2 w-100 h-100 d-flex justify-content-center">
-
-    <div th:object="${workouts}" th:o class="table-responsive rounded col-md-11" style="border: white solid thin;">
-        <h1 style="color: white;">All workouts</h1>
-        <table class="table table-striped" style="color: white">
-            <thead >
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Exercises</th>
-                <th scope="col"></th>
-            </tr>
-            <div th:each="workout : ${workouts}">
-                <tr>
-                    <th scope="col" th:value="${workout.id}" th:text="${workout.id}">Username</th>
-                    <th scope="col" th:value="${workout.workoutName}" th:text="${workout.workoutName}">First Name</th>
-                    <th scope="col" th:value="${workout.duration}" th:text="${workout.duration}">Last Name</th>
-
-                    <th scope="col">
-                        <div th:each="e: ${workout.exercises}"
-                        th:value="${e}"
-                        th:text="${e}"> Exercise</div>
-                    </th>
-                    <th scope="col">
-                        <a style="color: black" class="resource-link mt-4" th:href="@{/workout/all/delete/{id}(id=${workout.id})}" >Delete Workout</a>
-                    </th>
-                </tr>
-            </div>
-            </thead>
-            <tbody id="all-students"></tbody>
-        </table>
+<body class=".bg-blur" style="height: 800px;">
+<div class="row p-2 w-100 h-100 d-flex justify-content-center" th:object="${workouts}">
+    <div class="row">
+        <div th:each="workout : ${workouts}">
+              <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                      <h5 class="card-title" th:text="${workout.workoutName}"></h5>
+                      <p class="card-text fifty-chars" th:text="${workout.description}"></p>
+                      <a th:href="@{/workout/details/{id}(id=${workout.id})}" class="flex btn btn-primary">Details</a>
+                  </div>
+             </div>
+        </div>
     </div>
-</div>
 
+</div>
 </body>
+
+
+<footer th:replace="fragments/commons::footer"></footer>
 </html>
+
+<!--<section id="car-listings">-->
+<!--    <h1>Car Listings</h1>-->
+<!--    <div class="listings">-->
+
+<!--        &lt;!&ndash; Display all records &ndash;&gt;-->
+<!--        <div class="listing">-->
+<!--            <div class="preview">-->
+<!--                <img src="/images/audia3.jpg">-->
+<!--            </div>-->
+<!--            <h2>Audi A3</h2>-->
+<!--            <div class="info">-->
+<!--                <div class="data-info">-->
+<!--                    <h3>Year: 2018</h3>-->
+<!--                    <h3>Price: 25000 $</h3>-->
+<!--                </div>-->
+<!--                <div class="data-buttons">-->
+<!--                    <a href="#" class="button-carDetails">Details</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+

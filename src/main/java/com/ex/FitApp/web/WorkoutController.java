@@ -70,6 +70,15 @@ public class WorkoutController {
         model.addAttribute("workouts", workoutService.getAllWorkouts(principal.getUsername()));
         return "workout-all";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/details/{id}")
+    public String getDetailsForWorkout(Model model,@PathVariable("id") Long workoutId){
+        model.addAttribute("workout", workoutService.findById(workoutId));
+        return "workout-details";
+    }
+
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping ("/all/delete/{id}")
     public String deleteMessageDetails(@PathVariable("id") Long messageId){

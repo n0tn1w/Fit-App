@@ -29,7 +29,6 @@ footer {
 }
 
 body {
-    background-image: url(/images/background.jpg);
     background-position: center;
     background-attachment: fixed;
     background-size: cover;
@@ -37,7 +36,6 @@ body {
 }
 
 #all-articles-jumbotron {
-    background-image: url("/images/instruments.jpg");
     background-position: center;
 }
 
@@ -116,4 +114,12 @@ h2{
 
 .home-main {
     display: flex;
+}
+
+
+.fifty-chars {
+    width: 50ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
