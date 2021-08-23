@@ -4,8 +4,8 @@
 <head th:replace="fragments/commons::head"></head>
 <header  th:replace="fragments/commons::nav"></header>
 
-<body class=".bg-blur" style="height: 800px;">
-<div class="row p-2 w-100 h-100 d-flex justify-content-center" th:object="${workouts}">
+<body class=".bg-blur" style="height: 800px">
+<div class="row p-2 w-100 h-100 d-flex justify-content-center" style="margin: 100px" th:object="${workouts}">
     <div class="row">
         <div th:each="workout : ${workouts}">
               <div class="card" style="width: 18rem;">

@@ -5,4 +5,38 @@
 
 <header  th:replace="fragments/commons::nav"></header>
 
+
+<body class="bg-blur">
+    <div th:object="${workout}" style="margin: 50px">
+        <h1 th:text="*{workoutName}"></h1>
+
+        <hr>
+        <ul class="details-props">
+            <li><h3>Duration: </h3><span class="float-none" th:text="*{duration}"></span><span class="float-none"> minutes</span></li>
+
+            <div th:each="e: ${exercises}">
+                <div>
+                    <span>Sets </span>
+                    <span>Weigths</span>
+                    <span>BodyPart </span>
+                </div>
+            </div>
+
+
+
+        </ul>
+
+        <p class="description-para">Some description of this car. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Sunt voluptate quam nesciunt ipsa veritatis voluptas optio debitis repellat porro
+            sapiente.</p>
+
+        <div class="details-buttons">
+            <a href="#" class="button-list">Edit</a>
+            <a href="#" class="button-list">Delete</a>
+        </div>
+
+
+    </div>
+</body>
+
 </html>

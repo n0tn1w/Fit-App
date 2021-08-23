@@ -3,6 +3,8 @@ package com.ex.FitApp.services.impl;
 import com.ex.FitApp.models.bindings.WorkoutAddBinding;
 import com.ex.FitApp.models.entities.ExerciseEntity;
 import com.ex.FitApp.models.entities.WorkoutEntity;
+import com.ex.FitApp.models.views.ExerciseDetailsView;
+import com.ex.FitApp.models.views.UserControlPanelView;
 import com.ex.FitApp.models.views.WorkoutDetailsView;
 import com.ex.FitApp.models.views.WorkoutView;
 import com.ex.FitApp.repositories.UserRepository;
@@ -87,6 +89,14 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutDetailsView findById(Long workoutId) {
         WorkoutDetailsView view= this.modelMapper.map(workoutRepository.findById(workoutId).orElse(null), WorkoutDetailsView.class);
         return view;
+    }
+
+    @Override
+    public List<ExerciseDetailsView> findAllExercisesInAWorkout(Long workoutId) {
+        return this.workoutRepository.findAllExerciseFromWorkoutId(workoutId)
+                .stream()
+                .map(exerciseEntity -> modelMapper.map(exerciseEntity,ExerciseDetailsView.class))
+                .collect(Collectors.toList());
     }
 
 

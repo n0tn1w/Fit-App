@@ -74,7 +74,8 @@ public class WorkoutController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/details/{id}")
     public String getDetailsForWorkout(Model model,@PathVariable("id") Long workoutId){
-        model.addAttribute("workout", workoutService.findById(workoutId));
+        model.addAttribute("workout", this.workoutService.findById(workoutId));
+        model.addAttribute("exercises",this.workoutService.findAllExercisesInAWorkout(workoutId));
         return "workout-details";
     }
 

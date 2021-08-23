@@ -123,3 +123,31 @@ h2{
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.details-props {
+    margin-top: 16px;
+    list-style: none;
+}
+
+.details-props>li {
+    font-size: 20px;
+}
+.details-props>li>span {
+    font-weight: 500;
+    display: inline-block;
+}
+.details-props>li>h3 {
+    font-weight: 600;
+    display: inline-block;
+    width: 125px;
+}
+.description-para {
+    margin-top: 16px;
+    font-size: 16px;
+}
+.details-buttons {
+    text-align: center;
+    margin: auto;
+    margin-top: 34px;
+}
+
