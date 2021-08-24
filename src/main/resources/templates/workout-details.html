@@ -35,7 +35,7 @@
             </table>
 
             <h3>Description:</h3>
-            <span class="description-para" th:text="*{description}"></span>
+            <p class="description-para" th:text="*{description}"></p>
             <th:block th:if="${isTheLoggedInUserOwner == true}">
                 <div class="details-buttons">
                     <form th:action="@{/workout/details/edit/{id}(id=${workout.id})}" method="GET">

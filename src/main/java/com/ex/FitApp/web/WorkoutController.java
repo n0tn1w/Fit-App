@@ -75,7 +75,7 @@ public class WorkoutController {
 //        model.addAttribute("workouts", workoutService.getAllWorkouts(principal.getUsername()));
 //        return "workout-all";
 //    }
-        @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
     public String getALlWorkouts(Model model){
         model.addAttribute("workouts", workoutService.getAllWorkouts());
@@ -87,7 +87,6 @@ public class WorkoutController {
     public String getDetailsForWorkout(Model model,@PathVariable("id") Long workoutId,@AuthenticationPrincipal UserDetails principal){
         model.addAttribute("workout", this.workoutService.findById(workoutId));
         model.addAttribute("exercises",this.workoutService.findAllExercisesInAWorkout(workoutId));
-
         model.addAttribute("isTheLoggedInUserOwner",this.workoutService.checkIfLoggedUserIsTheOwner(principal.getUsername(),workoutId));
 
         return "workout-details";
