@@ -9,18 +9,16 @@ public class WorkoutEntity extends BaseEntity{
 
     @Column(nullable = false,name = "workout_name")
     private String workoutName;
-
     @Column(nullable = false)
     private int duration;
     @Column(nullable = false,columnDefinition = "TEXT")
     private String description;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     private List<ExerciseEntity> exercises;
-    
+
 
     public WorkoutEntity() {
     }
-
 
     public String getWorkoutName() {
         return workoutName;

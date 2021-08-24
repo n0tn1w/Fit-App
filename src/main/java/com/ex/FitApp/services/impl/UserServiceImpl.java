@@ -20,7 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +84,11 @@ public class UserServiceImpl implements UserService {
 
         WorkoutEntity workoutEntity=this.workoutService.bindingToEntity(workoutModel);
 
+        if(userEntity.getWorkouts() == null){
+            userEntity.setWorkouts(new HashSet<WorkoutEntity>());
+        }
         userEntity.getWorkouts().add(workoutEntity);
+
         this.userRepository.save(userEntity);
     }
 

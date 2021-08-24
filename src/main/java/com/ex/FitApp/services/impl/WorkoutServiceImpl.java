@@ -51,8 +51,7 @@ public class WorkoutServiceImpl implements WorkoutService {
             workoutEntity.getExercises().add(this.exerciseService.findByExName(exercise));
         }
 
-
-        this.workoutRepository.save(workoutEntity);
+//        this.workoutRepository.save(workoutEntity);
     }
 
     @Override
@@ -82,8 +81,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void deleteById(Long messageId) {
-        this.workoutRepository.deleteById(messageId);
+    public void deleteById(Long workoutId) {
+        System.out.println();
+        this.workoutRepository.deleteById(workoutId);
     }
 
     public WorkoutDetailsView findById(Long workoutId) {

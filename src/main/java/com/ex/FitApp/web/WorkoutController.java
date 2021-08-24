@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @Controller
@@ -58,7 +59,7 @@ public class WorkoutController {
             return "redirect:/workout/add";
         }
 
-        this.workoutService.addWorkout(workoutModel);
+//        this.workoutService.addWorkout(workoutModel);
         this.userService.setWorkout(principal.getUsername(),workoutModel);
         return "redirect:/home";
     }
@@ -79,11 +80,10 @@ public class WorkoutController {
         return "workout-details";
     }
 
-
     @PreAuthorize("isAuthenticated()")
-    @GetMapping ("/all/delete/{id}")
-    public String deleteMessageDetails(@PathVariable("id") Long messageId){
-        this.workoutService.deleteById(messageId);
-        return "redirect:/control-panel/messages-details";
+    @GetMapping ("/details/delete/{id}")
+    public String deleteDetails(@PathVariable("id") Long workoutId){
+        this.workoutService.deleteById(workoutId);
+        return "redirect:/workout/all";
     }
 }

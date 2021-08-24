@@ -18,7 +18,7 @@ public interface WorkoutService {
 
     List<WorkoutView> getAllWorkouts(String username);
 
-    void deleteById(Long messageId);
+    void deleteById(Long workoutId);
 
     WorkoutDetailsView findById(Long workoutId);
 

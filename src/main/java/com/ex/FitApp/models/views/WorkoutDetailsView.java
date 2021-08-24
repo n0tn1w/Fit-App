@@ -3,7 +3,7 @@ package com.ex.FitApp.models.views;
 import java.util.List;
 
 public class WorkoutDetailsView {
-
+    private String id;
     private String workoutName;
     private int duration;
     private String description;
@@ -42,5 +42,13 @@ public class WorkoutDetailsView {
 
     public void setExercises(List<String> exercises) {
         this.exercises = exercises;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

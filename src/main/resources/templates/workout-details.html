@@ -12,30 +12,40 @@
 
         <hr>
         <ul class="details-props">
-            <li><h3>Duration: </h3><span class="float-none" th:text="*{duration}"></span><span class="float-none"> minutes</span></li>
+            <li><h3>Duration: </h3><span class="float-none" th:text="*{duration}"></span><span class="m-1"> minutes</span></li>
 
-            <div th:each="e: ${exercises}">
-                <div>
-                    <span>Sets </span>
-                    <span>Weigths</span>
-                    <span>BodyPart </span>
+            <h3>Exercises:</h3>
+            <table class="table">
+                <thead>
+                <tr class="table-top-row">
+                    <th scope="col">Name</th>
+                    <th scope="col">Sets</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col">Body group</th>
+                </tr>
+                <div th:each="e: ${exercises}" class="row">
+                    <tr>
+                        <th scope="col" th:text="${e.exName}"></th>
+                        <th scope="col" th:text="${e.sets}"></th>
+                        <th scope="col" th:text="${e.weights}"></th>
+                        <th scope="col" th:text="${e.bodyGroup}"></th>
+                    </tr>
                 </div>
+                </thead>
+            </table>
+
+            <h3>Description:</h3>
+            <span class="description-para" th:text="*{description}"></span>
+
+            <div class="details-buttons">
+                <form th:action="@{/workout/details/edit/{id}(id=${workout.id})}" method="GET">
+                    <button class="btn button-list text-uppercase font-weight-bold mb-2">Edit</button>
+                </form>
+                <form th:action="@{/workout/details/delete/{id}(id=${workout.id})}" method="GET">
+                    <button class="btn button-list text-uppercase font-weight-bold mb-2">Delete</button>
+                </form>
             </div>
-
-
-
         </ul>
-
-        <p class="description-para">Some description of this car. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Sunt voluptate quam nesciunt ipsa veritatis voluptas optio debitis repellat porro
-            sapiente.</p>
-
-        <div class="details-buttons">
-            <a href="#" class="button-list">Edit</a>
-            <a href="#" class="button-list">Delete</a>
-        </div>
-
-
     </div>
 </body>
 

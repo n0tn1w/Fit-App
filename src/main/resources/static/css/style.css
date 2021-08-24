@@ -141,13 +141,29 @@ h2{
     display: inline-block;
     width: 125px;
 }
+.details-props>table{
+    background-color: white;
+    width: 300px;
+    text-overflow: ellipsis;
+}
 .description-para {
     margin-top: 16px;
     font-size: 16px;
 }
 .details-buttons {
-    text-align: center;
-    margin: auto;
-    margin-top: 34px;
+    text-align: left;
+    /*margin: 34px auto auto;*/
+    margin-top: 16px;
 }
+.details-buttons>form{
+    float:left;
+    margin-right:5px;
+}
+
+.table-top-row{
+    background-color: rgb(214, 214, 214);
+    font-weight: 500;
+}
+
+
 
