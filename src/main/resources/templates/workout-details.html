@@ -36,15 +36,16 @@
 
             <h3>Description:</h3>
             <span class="description-para" th:text="*{description}"></span>
-
-            <div class="details-buttons">
-                <form th:action="@{/workout/details/edit/{id}(id=${workout.id})}" method="GET">
-                    <button class="btn button-list text-uppercase font-weight-bold mb-2">Edit</button>
-                </form>
-                <form th:action="@{/workout/details/delete/{id}(id=${workout.id})}" method="GET">
-                    <button class="btn button-list text-uppercase font-weight-bold mb-2">Delete</button>
-                </form>
-            </div>
+            <th:block th:if="${isTheLoggedInUserOwner == true}">
+                <div class="details-buttons">
+                    <form th:action="@{/workout/details/edit/{id}(id=${workout.id})}" method="GET">
+                        <button class="btn button-list text-uppercase font-weight-bold mb-2">Edit</button>
+                    </form>
+                    <form th:action="@{/workout/details/delete/{id}(id=${workout.id})}" method="GET">
+                        <button class="btn button-list text-uppercase font-weight-bold mb-2">Delete</button>
+                    </form>
+                </div>
+            </th:block>
         </ul>
     </div>
 </body>

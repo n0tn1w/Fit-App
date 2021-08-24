@@ -20,7 +20,7 @@ public class UserEntity extends BaseEntity{
     @Column(name = "username",nullable = false)
     private String username;
 
-    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER, mappedBy = "userEntity")
     private Set<WorkoutEntity> workouts;
 
     @Email

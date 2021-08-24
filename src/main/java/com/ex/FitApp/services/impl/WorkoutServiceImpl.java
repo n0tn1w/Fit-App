@@ -2,9 +2,9 @@ package com.ex.FitApp.services.impl;
 
 import com.ex.FitApp.models.bindings.WorkoutAddBinding;
 import com.ex.FitApp.models.entities.ExerciseEntity;
+import com.ex.FitApp.models.entities.UserEntity;
 import com.ex.FitApp.models.entities.WorkoutEntity;
 import com.ex.FitApp.models.views.ExerciseDetailsView;
-import com.ex.FitApp.models.views.UserControlPanelView;
 import com.ex.FitApp.models.views.WorkoutDetailsView;
 import com.ex.FitApp.models.views.WorkoutView;
 import com.ex.FitApp.repositories.UserRepository;
@@ -15,8 +15,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,18 +41,21 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void addWorkout(WorkoutAddBinding workoutModel) {
+    public WorkoutEntity addWorkout(WorkoutAddBinding workoutModel, String username) {
         WorkoutEntity workoutEntity=this.modelMapper.map(workoutModel,WorkoutEntity.class);
+        UserEntity user = this.userRepository.findByUsername(username).orElse(null);
 
         if(workoutEntity.getExercises().size() !=0){
-            workoutEntity.setExercises(new ArrayList<>());
+            workoutEntity.setExercises(new HashSet<>());
         }
 
         for (String exercise : workoutModel.getExercisesNames()) {
             workoutEntity.getExercises().add(this.exerciseService.findByExName(exercise));
         }
+        workoutEntity.setUserEntity(user);
 
-//        this.workoutRepository.save(workoutEntity);
+        this.workoutRepository.save(workoutEntity);
+        return workoutEntity;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         WorkoutEntity workoutEntity=this.modelMapper.map(workoutModel,WorkoutEntity.class);
 
         if(workoutEntity.getExercises().size() !=0){
-            workoutEntity.setExercises(new ArrayList<>());
+            workoutEntity.setExercises(new HashSet<>());
         }
 
         for (String exercise : workoutModel.getExercisesNames()) {
@@ -69,7 +73,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public List<WorkoutView> getAllWorkouts(String username) {
+    public List<WorkoutView> getAllWorkoutsByUsername(String username) {
 
         List<WorkoutView> workouts=new ArrayList<>();
         for (WorkoutEntity workoutEntity :this.userRepository.findAllUsersWorkout(username) ) {
@@ -82,8 +86,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public void deleteById(Long workoutId) {
-        System.out.println();
         this.workoutRepository.deleteById(workoutId);
+        System.out.println();
     }
 
     public WorkoutDetailsView findById(Long workoutId) {
@@ -97,6 +101,43 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .stream()
                 .map(exerciseEntity -> modelMapper.map(exerciseEntity,ExerciseDetailsView.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WorkoutView> getAllWorkouts() {
+       return this.workoutRepository.findAll().stream()
+                .map(workoutEntity -> modelMapper.map(workoutEntity,WorkoutView.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkIfLoggedUserIsTheOwner(String username, Long workoutId) {
+        AtomicBoolean isIt = new AtomicBoolean(false);
+        UserEntity userEntity =  this.userRepository.findByUsername(username).orElse(null);
+
+        if(userEntity == null){
+            return isIt.get();
+        }
+
+        userEntity.getWorkouts().forEach(workoutEntity -> {
+            if(workoutEntity.getId() == workoutId){
+                isIt.set(true);
+            }});
+
+        return isIt.get();
+    }
+
+    @Override
+    public void deleteWorkoutFromUser(String username, Long workoutId) {
+        UserEntity userEntity =  this.userRepository.findByUsername(username).orElse(null);
+        WorkoutEntity workoutEntity = this.workoutRepository.findById(workoutId).orElse(null);
+
+        if(userEntity==null || workoutEntity==null) {
+            return;
+        }
+
+        userEntity.getWorkouts().remove(workoutEntity);
+        this.workoutRepository.delete(workoutEntity);
     }
 
 

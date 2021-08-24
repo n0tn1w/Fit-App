@@ -1,7 +1,10 @@
 package com.ex.FitApp.models.entities;
 
+import org.apache.catalina.User;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "workouts")
@@ -13,8 +16,11 @@ public class WorkoutEntity extends BaseEntity{
     private int duration;
     @Column(nullable = false,columnDefinition = "TEXT")
     private String description;
-    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private List<ExerciseEntity> exercises;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<ExerciseEntity> exercises;
+
+    @ManyToOne()
+    private UserEntity userEntity;
 
 
     public WorkoutEntity() {
@@ -44,11 +50,19 @@ public class WorkoutEntity extends BaseEntity{
         this.description = description;
     }
 
-    public List<ExerciseEntity> getExercises() {
+    public Set<ExerciseEntity> getExercises() {
         return exercises;
     }
 
-    public void setExercises(List<ExerciseEntity> exercises) {
+    public void setExercises(Set<ExerciseEntity> exercises) {
         this.exercises = exercises;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

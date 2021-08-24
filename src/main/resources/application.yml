@@ -19,7 +19,7 @@ spring:
     #    For MySQL 8
     #database-platform: org.hibernate.dialect.MySQL8Dialect
     #For MySQL 5
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       ddl-auto: update
     open-in-view: false
@@ -30,5 +30,5 @@ carousel:
   images: foodCar.jpg, girlCar.jpg, yogaCar.jpg
   refresh-cron: "0 */10 * * * *"
 server:
-  port: 8080
+  port: 8000
 

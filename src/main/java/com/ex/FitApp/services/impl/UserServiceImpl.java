@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -78,17 +79,15 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Transactional
     @Override
-    public void setWorkout(String username, WorkoutAddBinding workoutModel) {
+    public void setWorkout(String username, WorkoutEntity workoutEntity) {
         UserEntity userEntity=this.userRepository.findByUsername(username).orElse(null);
-
-        WorkoutEntity workoutEntity=this.workoutService.bindingToEntity(workoutModel);
 
         if(userEntity.getWorkouts() == null){
             userEntity.setWorkouts(new HashSet<WorkoutEntity>());
         }
         userEntity.getWorkouts().add(workoutEntity);
-
         this.userRepository.save(userEntity);
     }
 
@@ -98,6 +97,8 @@ public class UserServiceImpl implements UserService {
                 .map(userEntity -> modelMapper.map(userEntity, UserControlPanelView.class))
                 .collect(Collectors.toList());
     }
+
+
 
 
 }

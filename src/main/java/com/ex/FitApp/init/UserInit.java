@@ -3,12 +3,14 @@ package com.ex.FitApp.init;
 import com.ex.FitApp.models.entities.ExerciseEntity;
 import com.ex.FitApp.models.entities.UserEntity;
 import com.ex.FitApp.models.entities.UserRoleEntity;
+import com.ex.FitApp.models.entities.WorkoutEntity;
 import com.ex.FitApp.models.entities.enums.BodyGroup;
 import com.ex.FitApp.models.entities.enums.BodyType;
 import com.ex.FitApp.models.entities.enums.UserRole;
 import com.ex.FitApp.repositories.ExerciseRepository;
 import com.ex.FitApp.repositories.UserRepository;
 import com.ex.FitApp.repositories.UserRoleRepository;
+import com.ex.FitApp.repositories.WorkoutRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,12 +22,14 @@ public class UserInit implements CommandLineRunner {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
     private final ExerciseRepository exerciseRepository;
+    private final WorkoutRepository workoutRepository;
 
-    public UserInit(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, ExerciseRepository exerciseRepository) {
+    public UserInit(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, ExerciseRepository exerciseRepository, WorkoutRepository workoutRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.exerciseRepository = exerciseRepository;
+        this.workoutRepository = workoutRepository;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class UserInit implements CommandLineRunner {
             user.setFirstName("Kiril");
             user.setLastName("Kirilov");
             user.setBodyType(BodyType.MESOMORPH);
-            user.setUsername("kiro");
+            user.setUsername("ivan");
             user.setPassword(passwordEncoder.encode("1234"));
             user.setAge(16);
             user.setEmail("ivan@ivan");
@@ -84,6 +88,7 @@ public class UserInit implements CommandLineRunner {
             exercise2.setWeights(70);
 
             this.exerciseRepository.save(exercise2);
+
 
         }
     }

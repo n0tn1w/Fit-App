@@ -12,15 +12,21 @@ import java.util.List;
 public interface WorkoutService {
     WorkoutEntity findByWorkoutName(String workoutName);
 
-    void addWorkout(WorkoutAddBinding workoutModel);
+    WorkoutEntity addWorkout(WorkoutAddBinding workoutModel, String username);
 
     WorkoutEntity bindingToEntity(WorkoutAddBinding workoutModel);
 
-    List<WorkoutView> getAllWorkouts(String username);
+    List<WorkoutView> getAllWorkoutsByUsername(String username);
 
     void deleteById(Long workoutId);
 
     WorkoutDetailsView findById(Long workoutId);
 
     List<ExerciseDetailsView>findAllExercisesInAWorkout(Long workoutId);
+
+    List<WorkoutView> getAllWorkouts();
+
+    boolean checkIfLoggedUserIsTheOwner(String username, Long workoutId);
+
+    void deleteWorkoutFromUser(String username, Long workoutId);
 }

@@ -1,6 +1,7 @@
 package com.ex.FitApp.web;
 
 import com.ex.FitApp.models.bindings.WorkoutAddBinding;
+import com.ex.FitApp.models.entities.WorkoutEntity;
 import com.ex.FitApp.services.ExerciseService;
 import com.ex.FitApp.services.UserService;
 import com.ex.FitApp.services.WorkoutService;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/workout")
@@ -59,24 +61,35 @@ public class WorkoutController {
             return "redirect:/workout/add";
         }
 
-//        this.workoutService.addWorkout(workoutModel);
-        this.userService.setWorkout(principal.getUsername(),workoutModel);
-        return "redirect:/home";
+//        this.userService.setWorkout(principal.getUsername(),
+//                this.workoutService.addWorkout(workoutModel,principal.getUsername()));
+
+        this.workoutService.addWorkout(workoutModel,principal.getUsername());
+        return "redirect:/workout/all";
     }
 
-
-    @PreAuthorize("isAuthenticated()")
+    //all workouts for only 1 user
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/all")
+//    public String getALlWorkouts(Model model,@AuthenticationPrincipal UserDetails principal){
+//        model.addAttribute("workouts", workoutService.getAllWorkouts(principal.getUsername()));
+//        return "workout-all";
+//    }
+        @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
-    public String getALlWorkouts(Model model,@AuthenticationPrincipal UserDetails principal){
-        model.addAttribute("workouts", workoutService.getAllWorkouts(principal.getUsername()));
+    public String getALlWorkouts(Model model){
+        model.addAttribute("workouts", workoutService.getAllWorkouts());
         return "workout-all";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/details/{id}")
-    public String getDetailsForWorkout(Model model,@PathVariable("id") Long workoutId){
+    public String getDetailsForWorkout(Model model,@PathVariable("id") Long workoutId,@AuthenticationPrincipal UserDetails principal){
         model.addAttribute("workout", this.workoutService.findById(workoutId));
         model.addAttribute("exercises",this.workoutService.findAllExercisesInAWorkout(workoutId));
+
+        model.addAttribute("isTheLoggedInUserOwner",this.workoutService.checkIfLoggedUserIsTheOwner(principal.getUsername(),workoutId));
+
         return "workout-details";
     }
 
