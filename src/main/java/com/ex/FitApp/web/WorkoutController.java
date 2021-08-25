@@ -1,7 +1,9 @@
 package com.ex.FitApp.web;
 
 import com.ex.FitApp.models.bindings.WorkoutAddBinding;
+import com.ex.FitApp.models.bindings.WorkoutEditBinding;
 import com.ex.FitApp.models.entities.WorkoutEntity;
+import com.ex.FitApp.models.views.WorkoutDetailsView;
 import com.ex.FitApp.services.ExerciseService;
 import com.ex.FitApp.services.UserService;
 import com.ex.FitApp.services.WorkoutService;
@@ -61,8 +63,8 @@ public class WorkoutController {
             return "redirect:/workout/add";
         }
 
-//        this.userService.setWorkout(principal.getUsername(),
-//                this.workoutService.addWorkout(workoutModel,principal.getUsername()));
+    //        this.userService.setWorkout(principal.getUsername(),
+    //                this.workoutService.addWorkout(workoutModel,principal.getUsername()));
 
         this.workoutService.addWorkout(workoutModel,principal.getUsername());
         return "redirect:/workout/all";
@@ -94,8 +96,84 @@ public class WorkoutController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping ("/details/delete/{id}")
-    public String deleteDetails(@PathVariable("id") Long workoutId){
-        this.workoutService.deleteById(workoutId);
-        return "redirect:/workout/all";
+    public String deleteDetails(@PathVariable("id") Long workoutId,@AuthenticationPrincipal UserDetails principal){
+        if(this.workoutService.checkIfLoggedUserIsTheOwner(principal.getUsername(),workoutId)) {
+            this.workoutService.deleteById(workoutId);
+            return "redirect:/workout/all";
+        }else {
+            return "redirect:/home";
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/edit/{id}")
+    private String edit(Model model, @PathVariable("id") Long workoutId,@AuthenticationPrincipal UserDetails principal){
+       if(this.workoutService.checkIfLoggedUserIsTheOwner(principal.getUsername(),workoutId)) {
+           WorkoutDetailsView workoutView = this.workoutService.findById(workoutId);
+           WorkoutEditBinding workoutBinding = new WorkoutEditBinding();
+
+           if (!model.containsAttribute("workout")) {
+               model.addAttribute("workout", this.workoutService.preSetBindingValue(workoutBinding, workoutView));
+           }
+           model.addAttribute("wkId", workoutId);
+           model.addAttribute("exercises", this.workoutService.findAllExercisesInAWorkoutWithIds(workoutId));
+           model.addAttribute("exercisesAll", this.workoutService.findExercisesThatAreNotInThisWorkout(workoutId));
+
+           return "workout-edit";
+       }else {
+           return "redirect:/home";
+       }
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/edit/{id}")
+    //should be PUT but html is shit
+    private String editWorkout(@Valid @ModelAttribute("workout") WorkoutEditBinding workout,
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                               @AuthenticationPrincipal UserDetails principal,
+                               @PathVariable("id") Long workoutId){
+        String workoutIdString = workoutId.toString();
+
+        if(this.workoutService.findByWorkoutName(workout.getWorkoutName()) != null && !workout.getWorkoutName().equals(this.workoutService.findById(workoutId).getWorkoutName())) {
+            bindingResult.rejectValue("workoutName", "workout", "A workout with this name already exists.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("workout", workout);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + "workout", bindingResult);
+            redirectAttributes.addAttribute("exercises",this.workoutService.findAllExercisesInAWorkoutWithIds(workoutId));
+            return "redirect:/workout/edit/"+workoutId;
+        }
+
+        this.workoutService.editWorkout(workout,principal.getUsername(),workoutId);
+
+        return "redirect:/workout/details/"+workoutId;
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/edit/{wkId}/exercise-delete/{exerciseId}")
+    public String deleteEditExercise(@PathVariable("wkId") Long workoutId,@PathVariable("exerciseId") Long exerciseId,@AuthenticationPrincipal UserDetails principal){
+        if(this.workoutService.checkIfLoggedUserIsTheOwner(principal.getUsername(),workoutId)) {
+            if(this.workoutService.findAllExercisesInAWorkoutWithIds(workoutId).size()>1) {
+                this.workoutService.removeExercise(workoutId, exerciseId);
+                return "redirect:/workout/edit/" + workoutId;
+            }else{
+                return "redirect:/workout/edit/" + workoutId;
+            }
+        }else {
+            return "redirect:/home";
+        }
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/edit/{wkId}/exercise-add/{exerciseId}")
+    public String addEditExercise(@PathVariable("wkId") Long workoutId,@PathVariable("exerciseId") Long exerciseId,@AuthenticationPrincipal UserDetails principal){
+        if(this.workoutService.checkIfLoggedUserIsTheOwner(principal.getUsername(),workoutId)) {
+            this.workoutService.addExercise(workoutId, exerciseId);
+            return "redirect:/workout/edit/" + workoutId;
+        }else {
+            return "redirect:/home";
+        }
     }
 }

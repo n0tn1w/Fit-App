@@ -25,10 +25,10 @@
                 </tr>
                 <div th:each="e: ${exercises}" class="row">
                     <tr>
-                        <th scope="col" th:text="${e.exName}"></th>
-                        <th scope="col" th:text="${e.sets}"></th>
-                        <th scope="col" th:text="${e.weights}"></th>
-                        <th scope="col" th:text="${e.bodyGroup}"></th>
+                        <th scope="col" class="text-center" th:text="${e.exName}"></th>
+                        <th scope="col" class="text-center" th:text="${e.sets}"></th>
+                        <th scope="col" class="text-center" th:text="${e.weights}"></th>
+                        <th scope="col" class="text-center" th:text="${e.bodyGroup}"></th>
                     </tr>
                 </div>
                 </thead>
@@ -38,7 +38,7 @@
             <p class="description-para" th:text="*{description}"></p>
             <th:block th:if="${isTheLoggedInUserOwner == true}">
                 <div class="details-buttons">
-                    <form th:action="@{/workout/details/edit/{id}(id=${workout.id})}" method="GET">
+                    <form th:action="@{/workout/edit/{id}(id=${workout.id})}" method="GET">
                         <button class="btn button-list text-uppercase font-weight-bold mb-2">Edit</button>
                     </form>
                     <form th:action="@{/workout/details/delete/{id}(id=${workout.id})}" method="GET">

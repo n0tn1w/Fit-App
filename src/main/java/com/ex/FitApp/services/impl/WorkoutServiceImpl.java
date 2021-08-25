@@ -1,10 +1,12 @@
 package com.ex.FitApp.services.impl;
 
 import com.ex.FitApp.models.bindings.WorkoutAddBinding;
+import com.ex.FitApp.models.bindings.WorkoutEditBinding;
 import com.ex.FitApp.models.entities.ExerciseEntity;
 import com.ex.FitApp.models.entities.UserEntity;
 import com.ex.FitApp.models.entities.WorkoutEntity;
 import com.ex.FitApp.models.views.ExerciseDetailsView;
+import com.ex.FitApp.models.views.ExerciseWorkoutEditView;
 import com.ex.FitApp.models.views.WorkoutDetailsView;
 import com.ex.FitApp.models.views.WorkoutView;
 import com.ex.FitApp.repositories.UserRepository;
@@ -14,9 +16,7 @@ import com.ex.FitApp.services.WorkoutService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -94,12 +94,20 @@ public class WorkoutServiceImpl implements WorkoutService {
         WorkoutDetailsView view= this.modelMapper.map(workoutRepository.findById(workoutId).orElse(null), WorkoutDetailsView.class);
         return view;
     }
-
+    //could be done with generic
     @Override
     public List<ExerciseDetailsView> findAllExercisesInAWorkout(Long workoutId) {
         return this.workoutRepository.findAllExerciseFromWorkoutId(workoutId)
                 .stream()
                 .map(exerciseEntity -> modelMapper.map(exerciseEntity,ExerciseDetailsView.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExerciseWorkoutEditView> findAllExercisesInAWorkoutWithIds(Long workoutId) {
+        return this.workoutRepository.findAllExerciseFromWorkoutId(workoutId)
+                .stream()
+                .map(exerciseEntity -> modelMapper.map(exerciseEntity,ExerciseWorkoutEditView.class))
                 .collect(Collectors.toList());
     }
 
@@ -140,5 +148,77 @@ public class WorkoutServiceImpl implements WorkoutService {
         this.workoutRepository.delete(workoutEntity);
     }
 
+    @Override
+    public void editWorkout(WorkoutEditBinding workoutNew, String username, Long workoutId) {
+        this.workoutRepository.findById(workoutId)
+                .map(workout -> {
+                    workout.setDescription(workoutNew.getDescription());
+                    workout.setDuration(workoutNew.getDuration());
+                    workout.setWorkoutName(workoutNew.getWorkoutName());
+//                    workout.setExercises(workoutNew.getExercisesNames());
+                    return this.workoutRepository.save(workout);
+                });
+    }
+
+    @Override
+    public WorkoutEditBinding preSetBindingValue(WorkoutEditBinding workoutBinding, WorkoutDetailsView workoutView) {
+        return this.modelMapper.map(workoutView,WorkoutEditBinding.class);
+    }
+
+    @Override
+    public boolean removeExercise(Long workoutId, Long exerciseId) {
+        WorkoutEntity workout = this.workoutRepository.findById(workoutId).orElse(null);
+        if(workout == null){
+            return false;
+        }
+        ExerciseEntity exercise =this.exerciseService.getExerciseById(exerciseId).orElse(null);
+        if(exercise == null){
+            return false;
+        }
+        Set<ExerciseEntity> exercises = workout.getExercises();
+        for (ExerciseEntity exerciseEntity : exercises) {
+            if(exercise.getExName().equals(exerciseEntity.getExName())){
+                exercises.remove(exerciseEntity);
+                break;
+            }
+        }
+
+        workout.setExercises(exercises);
+        this.workoutRepository.save(workout);
+        return true;
+    }
+
+    @Override
+    public boolean addExercise(Long workoutId, Long exerciseId) {
+        WorkoutEntity workout = this.workoutRepository.findById(workoutId).orElse(null);
+        if(workout == null){
+            return false;
+        }
+        ExerciseEntity exercise =this.exerciseService.getExerciseById(exerciseId).orElse(null);
+        if(exercise == null){
+            return false;
+        }
+        Set<ExerciseEntity> exercises = workout.getExercises();
+        for (ExerciseEntity exerciseEntity : exercises) {
+            if(exercise.getExName().equals(exerciseEntity.getExName())){
+                return false;
+            }
+        }
+
+        workout.getExercises().add(exercise);
+        this.workoutRepository.save(workout);
+        return true;
+    }
+
+    @Override
+    public List<ExerciseWorkoutEditView> findExercisesThatAreNotInThisWorkout(Long workoutId) {
+        List<ExerciseWorkoutEditView> all= this.exerciseService.getAll();
+        List<ExerciseDetailsView> my= this.findAllExercisesInAWorkout(workoutId);
+
+        for (ExerciseDetailsView mine : my) {
+            all.removeIf(al -> (al.getExName().equals(mine.getExName())));
+        }
+        return all.stream().map(exerciseEntity -> this.modelMapper.map(exerciseEntity,ExerciseWorkoutEditView.class)).collect(Collectors.toList());
+    }
 
 }

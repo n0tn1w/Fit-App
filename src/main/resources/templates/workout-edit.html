@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head"></head>
+<header  th:replace="fragments/commons::nav"></header>
+
+<body class="bg-blur">
+<div th:object="${workout}" style="margin: 50px;display: inline-block" >
+
+    <form class="details-props" th:action="@{/workout/edit/{id}(id=${wkId})}" method="POST">
+        <div class="form-label-group">
+            <label for="workoutName">Workout Name</label>
+            <input th:field="*{workoutName}" style="font-size: 26px;width: 500px" id="workoutName" type="text" name="workoutName"
+                   class="form-control"  th:placeholder="*{workoutName}" required autofocus minlength="4" maxlength="30"/>
+<!--            th:placeholder="*{workoutName}"-->
+        </div>
+        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('workoutName')}">
+            <small th:text="${e}" class="text-danger"></small>
+        </div>
+        <hr>
+
+        <li><h3>Duration: </h3><input th:field="*{duration}" style="width: 100px;display:inline-block" type="number" id="duration" name="duration" class="form-control" th:placeholder="*{duration}" required autofocus/><span class="m-1"> minutes</span></li>
+        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('duration')}">
+            <small th:text="${e}" class="text-danger"></small>
+        </div>
+
+        <h3>Exercises:</h3>
+        <table class="table">
+            <thead>
+            <tr class="table-top-row">
+                <th scope="col" class="text-center">Name</th>
+                <th scope="col" class="text-center">Sets</th>
+                <th scope="col" class="text-center">Weight</th>
+                <th scope="col" class="text-center">Body group</th>
+                <th scope="col"></th>
+            </tr>
+                <div th:each="e: ${exercises}" class="row">
+                        <tr>
+                            <th scope="col" class="text-center" style="vertical-align: middle;" th:text="${e.exName}"></th>
+                            <th scope="col" class="text-center" style="vertical-align: middle;" th:text="${e.sets}"></th>
+                            <th scope="col" class="text-center" style="vertical-align: middle;"  th:text="${e.weights}"></th>
+                            <th scope="col" class="text-center" style="vertical-align: middle;"  th:text="${e.bodyGroup}"></th>
+                            <th:block th:if="${exercises.size() > 1}">
+                            <th scope="col">
+                                <a th:href="@{'/workout/edit/' + ${wkId} + '/exercise-delete/' + ${e.id}}">
+                                    <button class="btn text-uppercase font-weight-bold" type="button">Delete</button>
+                                </a>
+                            </th>
+                            </th:block>
+                        </tr>
+                </div>
+            </thead>
+        </table>
+        <a th:onclick="displayExercises()">
+            <button class="btn text-uppercase font-weight-bold text-center mb-2" style="font-size: 25px;height:50px;width:50px;" type="button">+</button>
+        </a>
+
+        <h3>Description:</h3>
+        <p class="description-para">
+            <textarea minlength="0" maxlength=400 th:field="*{description}" style="min-height: 200px;" type="text" id="description" name="description" class="form-control" placeholder="Description"></textarea>
+        </p>
+
+        <button class="btn button-list text-uppercase font-weight-bold" type="submit">Save</button>
+        <a th:href="@{/workout/details/{id}(id=${wkId})}">
+            <button class="btn button-list text-uppercase font-weight-bold" type="button">Cancel</button>
+        </a>
+    </form>
+
+</div>
+<div hidden="" id="exercise-div" style="margin: 50px;display: inline-block;vertical-align:top;">
+    <h3>Add Exercises:</h3>
+    <table class="table details-exercises">
+        <thead>
+        <tr class="table-top-row">
+            <th scope="col" class="text-center">Name</th>
+            <th scope="col" class="text-center">Sets</th>
+            <th scope="col" class="text-center">Weight</th>
+            <th scope="col" class="text-center">Body group</th>
+            <th scope="col"></th>
+        </tr>
+        <div th:each="e: ${exercisesAll}" class="row">
+            <tr>
+                <th scope="col" class="text-center" style="vertical-align: middle;" th:text="${e.exName}"></th>
+                <th scope="col" class="text-center" style="vertical-align: middle;" th:text="${e.sets}"></th>
+                <th scope="col" class="text-center" style="vertical-align: middle;"  th:text="${e.weights}"></th>
+                <th scope="col" class="text-center" style="vertical-align: middle;"  th:text="${e.bodyGroup}"></th>
+                <th scope="col">
+                    <a th:href="@{@{'/workout/edit/' + ${wkId} + '/exercise-add/' + ${e.id}}}">
+                        <button class="btn text-uppercase font-weight-bold" type="button">Add</button>
+                    </a>
+                </th>
+            </tr>
+        </div>
+        </thead>
+    </table>
+</div>
+<script type="text/javascript" th:src="@{/js/editPage.js}"></script>
+</body>
+
+</html>
