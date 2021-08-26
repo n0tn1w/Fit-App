@@ -1,5 +1,6 @@
 package com.ex.FitApp.models.entities;
 
+import com.ex.FitApp.file.model.DBFile;
 import com.ex.FitApp.models.entities.enums.BodyType;
 import org.apache.catalina.User;
 
@@ -39,6 +40,10 @@ public class UserEntity extends BaseEntity{
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRoleEntity> roles=new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "picture_id")
+    private DBFile profilePicture;
 
     public UserEntity() {
     }
@@ -137,5 +142,13 @@ public class UserEntity extends BaseEntity{
 
     public void setWorkouts(Set<WorkoutEntity> workouts) {
         this.workouts = workouts;
+    }
+
+    public DBFile getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(DBFile profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

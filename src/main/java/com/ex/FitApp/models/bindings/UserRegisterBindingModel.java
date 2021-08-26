@@ -27,6 +27,7 @@ public class UserRegisterBindingModel {
 
     @NotNull(message = "Email field cannot be empty")
     @Email(message = "Invalid email")
+    @Length(max = 35, message = "Email length must be less than 36 characters.")
     private String email;
 
     @NotNull
@@ -38,15 +39,17 @@ public class UserRegisterBindingModel {
 
     @NotNull
     @Min(value = 0, message = "Age should be a positive number.")
+    @Max(value = 1000, message = "Age should be bellow 1000.")
     private int age;
 
     @NotNull
     @Min(value = 0,message = "Weight should be a positive number.")
+    @Max(value = 20000, message = "Weight should be bellow 20 000.")
     private double weight;
 
     @NotNull
     @Min(value = 0,message = "Height should be a positive number.")
-    @Max(value = 4,message = "Incorrect height.")
+    @Max(value = 4,message = "Weight should be bellow 4 meters.")
     private double height;
 
     @NotNull

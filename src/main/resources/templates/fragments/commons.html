@@ -47,6 +47,9 @@
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
             <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item" ><a th:href="@{/users/my-profile}" th:text="| ${#authentication.name}|" style="color: black;" class="nav-link"><span class="glyphicon" >My profile</span></a>
+                </li>
+
                 <li class="nav-item"><a th:href="@{/workout/all}" style="color: black" class="nav-link"><span class="glyphicon" >All workout</span></a>
                 </li>
 

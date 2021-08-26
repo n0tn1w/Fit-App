@@ -19,7 +19,7 @@
         </div>
         <hr>
 
-        <li><h3>Duration: </h3><input th:field="*{duration}" style="width: 100px;display:inline-block" type="number" id="duration" name="duration" class="form-control" th:placeholder="*{duration}" required autofocus/><span class="m-1"> minutes</span></li>
+        <li><h3>Duration: </h3><input th:field="*{duration}" style="width: 100px;display:inline-block" type="number" id="duration" name="duration" class="form-control" th:placeholder="*{duration}" required autofocus min="1" max="1000000"/><span class="m-1"> minutes</span></li>
         <div class="mx-auto mb-1" th:each="e : ${#fields.errors('duration')}">
             <small th:text="${e}" class="text-danger"></small>
         </div>
@@ -52,7 +52,7 @@
             </thead>
         </table>
         <a th:onclick="displayExercises()">
-            <button class="btn text-uppercase font-weight-bold text-center mb-2" style="font-size: 25px;height:50px;width:50px;" type="button">+</button>
+            <button id="edit-button" class="btn text-uppercase font-weight-bold text-center mb-2" style="font-size: 25px;height:50px;width:50px;" type="button">+</button>
         </a>
 
         <h3>Description:</h3>
@@ -85,7 +85,7 @@
                 <th scope="col" class="text-center" style="vertical-align: middle;"  th:text="${e.weights}"></th>
                 <th scope="col" class="text-center" style="vertical-align: middle;"  th:text="${e.bodyGroup}"></th>
                 <th scope="col">
-                    <a th:href="@{@{'/workout/edit/' + ${wkId} + '/exercise-add/' + ${e.id}}}">
+                    <a th:href="@{'/workout/edit/' + ${wkId} + '/exercise-add/' + ${e.id}}">
                         <button class="btn text-uppercase font-weight-bold" type="button">Add</button>
                     </a>
                 </th>
