@@ -7,11 +7,12 @@ import com.ex.FitApp.models.bindings.UserRegisterBindingModel;
 import com.ex.FitApp.models.bindings.UserUsernameUpdateBinding;
 import com.ex.FitApp.models.entities.UserEntity;
 import com.ex.FitApp.models.entities.WorkoutEntity;
-import com.ex.FitApp.models.entities.enums.UserRole;
 import com.ex.FitApp.models.views.UserControlPanelView;
 import com.ex.FitApp.models.views.UserProfileView;
 import com.ex.FitApp.repositories.UserRepository;
-import com.ex.FitApp.repositories.UserRoleRepository;
+import com.ex.FitApp.repositories.AuthorityRepository;
+import com.ex.FitApp.security.DBUserService;
+import com.ex.FitApp.services.AuthorityProcessingService;
 import com.ex.FitApp.services.UserService;
 import com.ex.FitApp.services.WorkoutService;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,7 @@ import javax.transaction.Transactional;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,19 +39,21 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     private final PasswordEncoder passwordEncoder;
-    private final UserRoleRepository userRoleRepository;
+    private final AuthorityRepository authorityRepository;
 
     private final WorkoutService workoutService;
+    private final AuthorityProcessingService authorityProcessingService;
 
     private final DBUserService dbUserService;
     private final DBFileStorageService fileStorageService;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository, WorkoutService workoutService, DBUserService dbUserService, DBFileStorageService fileStorageService) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, WorkoutService workoutService, AuthorityProcessingService authorityProcessingService, DBUserService dbUserService, DBFileStorageService fileStorageService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
-        this.userRoleRepository = userRoleRepository;
+        this.authorityRepository = authorityRepository;
         this.workoutService = workoutService;
+        this.authorityProcessingService = authorityProcessingService;
         this.dbUserService = dbUserService;
         this.fileStorageService = fileStorageService;
     }
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public boolean registerUser(UserRegisterBindingModel registerModel) {
         UserEntity user = this.modelMapper.map(registerModel, UserEntity.class);
         user.setPassword(this.passwordEncoder.encode(registerModel.getPassword()));
-        user.addRole(userRoleRepository.findByRole(UserRole.USER));
+        user.setAuthorities(Set.of(authorityProcessingService.getUserAuthority()));
         this.userRepository.saveAndFlush(user);
 
         UserDetails principal = dbUserService.loadUserByUsername(user.getUsername());
@@ -91,7 +95,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity=this.userRepository.findByUsername(username).orElse(null);
 
         if(userEntity.getWorkouts() == null){
-            userEntity.setWorkouts(new HashSet<WorkoutEntity>());
+            userEntity.setWorkouts(new HashSet<>());
         }
         userEntity.getWorkouts().add(workoutEntity);
         this.userRepository.save(userEntity);
@@ -99,7 +103,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserControlPanelView> getAllUsersDetails() {
-        return this.userRepository.findAllByRoles(this.userRoleRepository.findByRole(UserRole.USER)).stream()
+        return this.userRepository.findAllByAuthorities(this.authorityRepository.findByAuthority("ROLE_USER")).stream()
                 .map(userEntity -> modelMapper.map(userEntity, UserControlPanelView.class))
                 .collect(Collectors.toList());
     }
@@ -159,10 +163,9 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) {
             throw new UsernameNotFoundException("User with username " + username + " cannot be found");
         }
+
         userEntity.setUsername(user.getUsername());
         this.userRepository.save(userEntity);
-
-
 //        return userEntity;
     }
 

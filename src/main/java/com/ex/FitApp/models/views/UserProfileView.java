@@ -1,16 +1,5 @@
 package com.ex.FitApp.models.views;
 
-import com.ex.FitApp.file.model.DBFile;
-import com.ex.FitApp.models.entities.UserRoleEntity;
-import com.ex.FitApp.models.entities.WorkoutEntity;
-import com.ex.FitApp.models.entities.enums.BodyType;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class UserProfileView {
     private String firstName;
     private String lastName;

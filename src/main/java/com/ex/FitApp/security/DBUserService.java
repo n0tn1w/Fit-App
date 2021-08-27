@@ -1,4 +1,4 @@
-package com.ex.FitApp.services.impl;
+package com.ex.FitApp.security;
 
 import com.ex.FitApp.models.entities.UserEntity;
 import com.ex.FitApp.repositories.UserRepository;
@@ -9,11 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+
+@Service
 public class DBUserService implements UserDetailsService {
 
   private final UserRepository userRepository;
@@ -31,18 +33,17 @@ public class DBUserService implements UserDetailsService {
     return mapToUserDetails(userEntity);
   }
 
-  private UserDetails mapToUserDetails(UserEntity userEntity) {
-    List<GrantedAuthority> authorities =
-        userEntity.
-            getRoles().
-            stream().
-            map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRole().name())).
-            collect(Collectors.toList());
+  private CustomUserDetails mapToUserDetails(UserEntity userEntity) {
 
-    return new User(
+    Collection<GrantedAuthority> grantedAuthoritySet = userEntity.
+            getAuthorities().
+            stream().
+            map(r -> new SimpleGrantedAuthority(r.getAuthority())).collect(Collectors.toSet());
+
+    return new CustomUserDetails(
         userEntity.getUsername(),
         userEntity.getPassword(),
-        authorities
+            grantedAuthoritySet
     );
   }
 }

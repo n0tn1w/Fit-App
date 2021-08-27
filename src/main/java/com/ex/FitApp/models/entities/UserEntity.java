@@ -2,12 +2,11 @@ package com.ex.FitApp.models.entities;
 
 import com.ex.FitApp.file.model.DBFile;
 import com.ex.FitApp.models.entities.enums.BodyType;
-import org.apache.catalina.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class UserEntity extends BaseEntity{
     private BodyType bodyType;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<UserRoleEntity> roles=new ArrayList<>();
+    private Set<AuthorityEntity> authorities=new HashSet<>();
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "picture_id")
@@ -121,19 +120,12 @@ public class UserEntity extends BaseEntity{
         this.height = height;
     }
 
-    public List<UserRoleEntity> getRoles() {
-        return roles;
+    public Set<AuthorityEntity> getAuthorities() {
+        return authorities;
     }
 
-    public UserEntity setRoles(List<UserRoleEntity> roles) {
-        this.roles = roles;
-        return this;
-    }
-
-    public UserEntity addRole(UserRoleEntity roleEntity) {
-        this.roles.add(roleEntity);
-        return this;
-
+    public void setAuthorities(Set<AuthorityEntity> authorities) {
+        this.authorities = authorities;
     }
 
     public Set<WorkoutEntity> getWorkouts() {

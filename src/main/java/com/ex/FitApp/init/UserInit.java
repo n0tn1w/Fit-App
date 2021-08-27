@@ -2,15 +2,13 @@ package com.ex.FitApp.init;
 
 import com.ex.FitApp.models.entities.ExerciseEntity;
 import com.ex.FitApp.models.entities.UserEntity;
-import com.ex.FitApp.models.entities.UserRoleEntity;
-import com.ex.FitApp.models.entities.WorkoutEntity;
 import com.ex.FitApp.models.entities.enums.BodyGroup;
 import com.ex.FitApp.models.entities.enums.BodyType;
-import com.ex.FitApp.models.entities.enums.UserRole;
 import com.ex.FitApp.repositories.ExerciseRepository;
 import com.ex.FitApp.repositories.UserRepository;
-import com.ex.FitApp.repositories.UserRoleRepository;
+import com.ex.FitApp.repositories.AuthorityRepository;
 import com.ex.FitApp.repositories.WorkoutRepository;
+import com.ex.FitApp.services.AuthorityProcessingService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,27 +17,27 @@ import org.springframework.stereotype.Component;
 public class UserInit implements CommandLineRunner {
     
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
+    private final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
     private final ExerciseRepository exerciseRepository;
     private final WorkoutRepository workoutRepository;
+    private final AuthorityProcessingService authorityProcessingService;
 
-    public UserInit(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, ExerciseRepository exerciseRepository, WorkoutRepository workoutRepository) {
+    public UserInit(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder, ExerciseRepository exerciseRepository, WorkoutRepository workoutRepository, AuthorityProcessingService authorityProcessingService) {
         this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
+        this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
         this.exerciseRepository = exerciseRepository;
         this.workoutRepository = workoutRepository;
+        this.authorityProcessingService = authorityProcessingService;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args){
+        if(this.authorityRepository.count() == 0){
+            this.authorityProcessingService.seedAuthorities();
+        }
         if(this.userRepository.count()==0){
-            UserRoleEntity adminRole= new UserRoleEntity().setRole(UserRole.ADMIN);
-            UserRoleEntity userRole= new UserRoleEntity().setRole(UserRole.USER);
-            
-            this.userRoleRepository.save(adminRole);
-            this.userRoleRepository.save(userRole);
 
             UserEntity admin= new UserEntity();
             admin.setFirstName("root");
@@ -51,7 +49,7 @@ public class UserInit implements CommandLineRunner {
             admin.setEmail("root@root");
             admin.setHeight(1.8);
             admin.setWeight(70);
-            admin.getRoles().add(this.userRoleRepository.findByRole(UserRole.ADMIN));
+            admin.getAuthorities().add(this.authorityRepository.findByAuthority("ROLE_ROOT_ADMIN"));
 
             this.userRepository.save(admin);
 
@@ -65,7 +63,7 @@ public class UserInit implements CommandLineRunner {
             user.setEmail("ivan@ivan");
             user.setHeight(1.74);
             user.setWeight(90);
-            user.getRoles().add(this.userRoleRepository.findByRole(UserRole.USER));
+            user.getAuthorities().add(this.authorityRepository.findByAuthority("ROLE_USER"));
 
             this.userRepository.save(user);
 

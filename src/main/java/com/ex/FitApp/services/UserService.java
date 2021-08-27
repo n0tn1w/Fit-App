@@ -32,5 +32,4 @@ public interface UserService {
     UserProfileView getUserProfile(String username);
 
     void updateUsername(String username, UserUsernameUpdateBinding user);
-//    UserEntity updateUsername(String username, UserUsernameUpdateBinding user);
 }
