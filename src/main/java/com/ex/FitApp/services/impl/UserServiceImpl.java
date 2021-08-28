@@ -3,11 +3,15 @@ package com.ex.FitApp.services.impl;
 import com.ex.FitApp.file.exception.FileStorageException;
 import com.ex.FitApp.file.model.DBFile;
 import com.ex.FitApp.file.service.DBFileStorageService;
+import com.ex.FitApp.models.bindings.UserEditBinding;
 import com.ex.FitApp.models.bindings.UserRegisterBindingModel;
 import com.ex.FitApp.models.bindings.UserUsernameUpdateBinding;
+import com.ex.FitApp.models.bindings.WorkoutEditBinding;
 import com.ex.FitApp.models.entities.UserEntity;
 import com.ex.FitApp.models.entities.WorkoutEntity;
+import com.ex.FitApp.models.entities.enums.BodyType;
 import com.ex.FitApp.models.views.UserControlPanelView;
+import com.ex.FitApp.models.views.UserEditView;
 import com.ex.FitApp.models.views.UserProfileView;
 import com.ex.FitApp.repositories.UserRepository;
 import com.ex.FitApp.repositories.AuthorityRepository;
@@ -167,6 +171,50 @@ public class UserServiceImpl implements UserService {
         userEntity.setUsername(user.getUsername());
         this.userRepository.save(userEntity);
 //        return userEntity;
+    }
+
+    @Override
+    public UserEditView getUserEditView(String username) {
+        UserEntity userEntity = this.userRepository.findByUsername(username).orElse(null);
+        if(userEntity == null){
+            throw new UsernameNotFoundException("User with username " + username + " cannot be found");
+        }
+        UserEditView view = this.modelMapper.map(userEntity,UserEditView.class);
+
+        DBFile pictureFile = userEntity.getProfilePicture();
+        byte[] profilePicture = null;
+        if (pictureFile != null) {
+            profilePicture = userEntity.getProfilePicture().getData();
+        }
+        String profilePictureString = "";
+        if (profilePicture != null) {
+            profilePictureString = Base64.getEncoder().encodeToString(profilePicture);
+        }
+        view.setProfilePictureString(profilePictureString);
+
+        return view;
+    }
+
+    @Override
+    public UserEditBinding preSetBindingValue(UserEditView userEditView) {
+        return this.modelMapper.map(userEditView, UserEditBinding.class);
+    }
+
+    @Override
+    public void updateUserParams(String username, UserEditBinding user) {
+        UserEntity userEntity = this.userRepository.findByUsername(username).orElse(null);
+        if(userEntity == null){
+            throw new UsernameNotFoundException("User with username " + username + " cannot be found");
+        }
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setAge(user.getAge());
+        userEntity.setWeight(user.getWeight());
+        userEntity.setHeight(user.getHeight());
+        userEntity.setBodyType(BodyType.valueOf(user.getBodyType()));
+
+        this.userRepository.save(userEntity);
     }
 
 

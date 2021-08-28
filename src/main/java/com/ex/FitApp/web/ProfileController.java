@@ -1,10 +1,14 @@
 package com.ex.FitApp.web;
 
 import com.ex.FitApp.file.exception.FileStorageException;
+import com.ex.FitApp.models.bindings.UserEditBinding;
 import com.ex.FitApp.models.bindings.UserUsernameUpdateBinding;
+import com.ex.FitApp.models.bindings.WorkoutEditBinding;
 import com.ex.FitApp.models.entities.AuthorityEntity;
 import com.ex.FitApp.models.entities.UserEntity;
+import com.ex.FitApp.models.views.UserEditView;
 import com.ex.FitApp.models.views.UserProfileView;
+import com.ex.FitApp.models.views.WorkoutDetailsView;
 import com.ex.FitApp.security.CustomUserDetails;
 import com.ex.FitApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +47,11 @@ public class ProfileController {
     private final UserService userService;
 //    private final AuthenticationProvider authenticationProvider;
 
+    @ModelAttribute("didYouPutWrongInput")
+    private boolean didYouPutWrongInput(){
+        return false;
+    }
+
     @Autowired
     public ProfileController(UserService userService) {
         this.userService = userService;
@@ -73,7 +82,7 @@ public class ProfileController {
                                  @AuthenticationPrincipal CustomUserDetails principal){
         //test if username not taken
         if(this.userService.findByUsername(user.getUsername()) != null) {
-            bindingResult.rejectValue("Username", "user", "A workout with this name already exists.");
+            bindingResult.rejectValue("username", "user", "A workout with this name already exists.");
         }
 
         if (bindingResult.hasErrors()) {
@@ -89,6 +98,35 @@ public class ProfileController {
 
         return "redirect:/users/my-profile";
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/my-profile/edit")
+    public String getEditProfile(Principal principal, Model model) {
 
+        UserEditView userEditView = this.userService.getUserEditView(principal.getName());
+
+        if (!model.containsAttribute("user")) {
+            model.addAttribute("user", this.userService.preSetBindingValue(userEditView));
+        }
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("profilePictureString", userEditView.getProfilePictureString());
+
+        return "profile-edit";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/my-profile/edit")
+    public String postEditProfile(@Valid @ModelAttribute("user") UserEditBinding user,
+                                  BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                                  @AuthenticationPrincipal CustomUserDetails principal) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + "user", bindingResult);
+            return "redirect:/users/my-profile/edit";
+        }
+
+        this.userService.updateUserParams(principal.getUsername(),user);
+
+        return "redirect:/users/my-profile";
+    }
 
 }

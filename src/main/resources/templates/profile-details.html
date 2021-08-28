@@ -12,49 +12,53 @@
 
 <body class="bg-blur">
 
-    <div th:object="${user}" style="min-height: 600px" >
-            <div class="text-center mt-5" style="height: 50px">
-                <h1 th:text="*{username}" class=" font-weight-bold" style="display:inline-block;margin: auto"></h1>
-<!--                <h1 style="display:inline">&#128736;</h1>-->
-                <button type="button" class="btn font-weight-bold" style="vertical-align: middle;margin-bottom: +20px" data-toggle="modal" data-target="#changeUsernameModal">
+    <div class="main-div" th:object="${user}">
+            <div class="text-center mt-5 title-div">
+                <h1 th:text="*{username}" class=" font-weight-bold"></h1>
+                <button type="button" class="btn font-weight-bold" data-toggle="modal" data-target="#changeUsernameModal">
                     &#128736;
                 </button>
             </div>
+            <th:block th:if="${didYouPutWrongInput == true}">
+                <div class="mx-auto text-center mb-1">
+                    <small class="text-danger">A workout with this name already exists.</small>
+                </div>
+            </th:block>
             <div class="mt-3">
                 <img th:if="*{profilePictureString == ''}" class="rounded-circle profile-img" th:src="@{/images/defPic.png}"/>
                 <img th:unless="*{profilePictureString == ''}" class="rounded-circle profile-img"
                      th:src="*{'data:image/jpg;base64,'+ profilePictureString}"/>
             </div>
             <div class="text-center">
-                <button type="button" class="btn mt-4 font-weight-bold text-uppercase" data-toggle="modal" data-target="#profilePictureModal" style="margin-left: auto;margin-right: auto;">
+                <button type="button" class="btn mt-4 font-weight-bold text-uppercase change-profile-button" data-toggle="modal" data-target="#profilePictureModal">
                     Change profile picture
                 </button>
             </div>
             <div class="text-center mt-3"  >
-                <div style="height: 75px;width: 600px;border: 5px solid rgba(228,92,92,0.7);background-color: rgb(214, 214, 214);border-radius: 15px;padding: 7.5px;margin: auto;">
+                <div class="open-edit-div">
                     <a>
-                        <button th:onclick="displayInfo()" id="show-button1" class="btn text-uppercase font-weight-bold text-center float-left" style="vertical-align: middle;margin-top: auto;margin-bottom: auto;padding: 3px;font-size: 25px;height:50px;width:50px;" type="button">+</button>
+                        <button th:onclick="displayInfo()" id="show-button1" class="btn text-uppercase font-weight-bold text-center float-left" type="button">+</button>
                     </a>
                     <a>
-                        <button th:onclick="displayInfo()" id="show-button2" class="btn text-uppercase font-weight-bold text-center float-right" style="vertical-align: middle;margin-top: auto;margin-bottom: auto;padding: 3px;font-size: 25px;height:50px;width:50px;" type="button">+</button>
+                        <button th:onclick="displayInfo()" id="show-button2" class="btn text-uppercase font-weight-bold text-center float-right" type="button">+</button>
                     </a>
                 </div>
 
             </div>
 
             <div id="info-div" hidden="" class="mt-3" >
-                <div class="mb-5 " style="width: 600px;border: 5px solid rgba(228,92,92,0.7);background-color: rgb(214, 214, 214);border-radius: 15px;padding: 7.5px;margin: auto">
-                    <ol style="margin: auto">
-                        <li style="font-size: 25px"><span style="font-weight:500">First Name: </span><span style="text-overflow: ellipsis;overflow:hidden;" th:text="*{firstName}"></span></li>
-                        <li style="font-size: 25px"><span style="font-weight:500">Last Name: </span><span style="text-overflow: ellipsis;overflow:hidden;" th:text="*{lastName}"></span></li>
-                        <li style="font-size: 25px"><span style="font-weight:500">Email: </span><span style="text-overflow: ellipsis;overflow:hidden;" th:text="*{email}"></span></li>
-                        <li style="font-size: 25px"><span style="font-weight:500">Age: </span><span style="text-overflow: ellipsis;overflow:hidden;" th:text="*{age}"></span></li>
-                        <li style="font-size: 25px"><span style="font-weight:500">Weight: </span><span style="text-overflow: ellipsis;overflow:hidden;" th:text="*{weight}"></span></li>
-                        <li style="font-size: 25px"><span style="font-weight:500">Height: </span><span style="text-overflow: ellipsis;overflow:hidden;" th:text="*{height}"></span></li>
-                        <li style="font-size: 25px"><span style="font-weight:500">Body Type: </span><span style="text-overflow: ellipsis;overflow:hidden;" th:text="*{bodyType}"></span></li>
+                <div class="mb-5 property-div">
+                    <ol class="details-list">
+                        <li><span class="property-span">First Name: </span><span class="my-property-span" th:text="*{firstName}"></span></li>
+                        <li><span class="property-span">Last Name: </span><span class="my-property-span" th:text="*{lastName}"></span></li>
+                        <li><span class="property-span">Email: </span><span class="my-property-span" th:text="*{email}"></span></li>
+                        <li><span class="property-span">Age: </span><span class="my-property-span" th:text="*{age}"></span></li>
+                        <li><span class="property-span">Weight: </span><span class="my-property-span" th:text="*{weight}"></span></li>
+                        <li><span class="property-span">Height: </span><span class="my-property-span" th:text="*{height}"></span></li>
+                        <li><span class="property-span">Body Type: </span><span class="my-property-span" th:text="*{bodyType}"></span></li>
                     </ol>
-                    <div class="mb-2" style=";height: 40px">
-                        <a>
+                    <div class="mb-2 edit-button">
+                        <a th:href="@{/users/my-profile/edit}">
                             <button class="mt-2 float-left btn text-uppercase font-weight-bold mb-2">Edit</button>
                         </a>
 
@@ -89,7 +93,7 @@
             </div>
         </div>
     </div>
-    <!-- Profile picture form -->
+    <!-- Profile username form -->
     <div class="modal fade" id="changeUsernameModal" tabindex="-1" role="dialog" aria-labelledby="changeUsernameLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -113,6 +117,7 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript" th:src="@{/js/profilePage.js}"></script>
     <footer th:replace="fragments/commons::footer"></footer>
 </body>

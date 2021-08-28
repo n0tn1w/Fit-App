@@ -7,3 +7,66 @@
     display: block;
     vertical-align: middle;
 }
+
+.main-div{
+    min-height: 600px;
+}
+.title-div{
+    height: 50px;
+}
+.title-div>h1{
+    display:inline-block;
+    margin: auto;
+}
+.title-div>button{
+    vertical-align: middle;
+    margin-bottom: +20px;
+}
+.change-profile-button{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.open-edit-div{
+    height: 75px;
+    width: 600px;
+    border: 5px solid rgba(228,92,92,0.7);
+    background-color: rgb(214, 214, 214);
+    border-radius: 15px;
+    padding: 7.5px;
+    margin: auto;
+}
+.open-edit-div>a>button{
+    vertical-align: middle;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 3px;
+    font-size: 25px;
+    height:50px;
+    width:50px;
+}
+.property-div{
+    width: 600px;
+    border: 5px solid rgba(228,92,92,0.7);
+    background-color: rgb(214, 214, 214);
+    border-radius: 15px;
+    padding: 7.5px;
+    margin: auto;
+}
+
+.details-list{
+    margin: auto
+}
+.details-list>li{
+    font-size: 25px;
+}
+.property-span{
+    font-weight:500;
+}
+.my-property-span{
+    text-overflow: ellipsis;
+    overflow:hidden;
+}
+.edit-button{
+    height: 40px;
+}

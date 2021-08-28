@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>My Profile</title>
+    <th:block th:include="fragments/commons::head"/>
+    <link rel="stylesheet" th:href="@{/css/profile.css}"/>
+    <meta charset="UTF-8">
+</head>
+<header th:replace="fragments/commons::nav"></header>
+
+<body class="bg-blur">
+
+<div class="main-div" th:object="${user}">
+    <div class="text-center mt-5 title-div">
+        <h1 th:text="${username}" class=" font-weight-bold"></h1>
+    </div>
+    <th:block th:if="${didYouPutWrongInput == true}">
+        <div class="mx-auto text-center mb-1">
+            <small class="text-danger">A workout with this name already exists.</small>
+        </div>
+    </th:block>
+    <div class="mt-3">
+        <img th:if="${profilePictureString == ''}" class="rounded-circle profile-img" th:src="@{/images/defPic.png}"/>
+        <img th:unless="${profilePictureString == ''}" class="rounded-circle profile-img"
+             th:src="${'data:image/jpg;base64,'+ profilePictureString}"/>
+    </div>
+    <div class="text-center mt-3"  >
+        <div class="open-edit-div">
+            <a th:href="@{/users/my-profile}">
+                <button id="show-button1" class="btn text-uppercase font-weight-bold text-center float-left" type="button">-</button>
+            </a>
+            <a th:href="@{/users/my-profile}">
+                <button id="show-button2" class="btn text-uppercase font-weight-bold text-center float-right" type="button">-</button>
+            </a>
+        </div>
+
+    </div>
+
+    <div id="info-div" class="mt-3" >
+        <div class="mb-5 property-div">
+            <form th:action="@{/users/my-profile/edit}" method="POST">
+                <ol class="details-list">
+                    <li class="mb-2">
+                        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('firstName')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </div>
+                        <div class="form-label-group">
+                            <span  style="font-weight:500;display:inline-block">First Name: </span>
+                            <input th:field="*{firstName}" style="display:inline-block;width: 437px;font-size: 25px;padding: 3px" id="firstName" type="text" name="firstName" class="form-control" placeholder="First Name" required autofocus minlength="4" maxlength="30" >
+                        </div>
+                    </li>
+                    <li class="mb-2" style="white-space:nowrap;">
+                        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('lastName')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </div>
+                        <div class="form-label-group">
+                            <span style="font-weight:500;display:inline-block">Last Name: </span>
+                            <input th:field="*{lastName}" style="display:inline-block;width: 440px;font-size: 25px;padding: 3px" type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required autofocus minlength="4" maxlength="30">
+                        </div>
+                    </li>
+                    <li class="mb-2" style="white-space:nowrap;">
+                        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('email')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </div>
+                        <div class="form-label-group">
+                            <span style="font-weight:500;display:inline-block">Email: </span>
+                            <input th:field="*{email}" style="display:inline-block;width: 499px;font-size: 25px;padding: 3px" type="email" id="email" name="email" class="form-control" placeholder="Email address" required maxlength="35">
+                        </div>
+                    </li>
+                    <li class="mb-2" style="white-space:nowrap;">
+                        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('age')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </div>
+                        <div class="form-label-group">
+                            <span style="font-weight:500;display:inline-block">Age: </span>
+                            <input th:field="*{age}" style="display:inline-block;width: 85px;font-size: 25px;padding: 3px" type="number" id="age" name="age" class="form-control" placeholder="Age" required min="0" max="1000">
+                        </div>
+                    </li>
+
+                    <li class="mb-2" style="white-space:nowrap;">
+                        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('weight')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </div>
+                        <div class="form-label-group">
+                            <span style="font-weight:500;display:inline-block">Weight: </span>
+                            <input th:field="*{weight}" style="display:inline-block;width: 110px;font-size: 25px;padding: 3px" type="number" step="0.01" id="weight" name="weight" class="form-control" placeholder="Weight" min="0" required max="20000">
+                        </div>
+                    </li>
+
+                    <li class="mb-2" style="white-space:nowrap;">
+                        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('height')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </div>
+                        <div class="form-label-group">
+                            <span style="font-weight:500;display:inline-block">Height: </span>
+                            <input th:field="*{height}" type="number" style="display:inline-block;width: 110px;font-size: 25px;padding: 3px" step="0.01" id="height" name="height" class="form-control" placeholder="Height" required min="0" max="20">
+                        </div>
+                    </li>
+                    <li class="mb-2" style="white-space:nowrap;">
+                        <div class="mx-auto mb-1" th:each="e : ${#fields.errors('bodyType')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </div>
+                        <div class="form-label-group">
+                            <span style="font-weight:500;display:inline-block">Body Type: </span>
+                            <select th:field="*{bodyType}" style="width: 440px;font-size: 20px;padding: 3px;border: lawngreen solid 2px" id="bodyType" name="bodyType" class="custom-select form-control">
+                                <option class="text-center"
+                                        th:each="g : ${T(com.ex.FitApp.models.entities.enums.BodyType).values()}"
+                                        th:value="${g}"
+                                        th:text="${g}">Select body type</option>
+                            </select>
+                        </div>
+                    </li>
+
+
+                </ol>
+
+                <div class="mb-2 edit-button">
+                    <button class="mt-2 float-left btn text-uppercase font-weight-bold mb-2" type="submit">Save</button>
+
+                    <a th:href="@{/users/my-profile}">
+                        <button class="mt-2 float-right btn text-uppercase font-weight-bold mb-2" type="button">Cancel</button>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+
+</html>

@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="form-label-group">
                                     <label for="age">Age</label>
-                                    <input th:field="*{age}" type="number" id="age" name="age" class="form-control" placeholder="Age" required max="1000">
+                                    <input th:field="*{age}" type="number" id="age" name="age" class="form-control" placeholder="Age" required min="0"  max="1000">
                                 </div>
 
 
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="form-label-group">
                                     <label for="weight">Weight in kg</label>
-                                    <input th:field="*{weight}" type="number" step="0.1" id="weight" name="weight" class="form-control" placeholder="Weight" required max="20000">
+                                    <input th:field="*{weight}" type="number" step="0.1" id="weight" name="weight" class="form-control" placeholder="Weight" required min="0" max="20000">
                                 </div>
 
                                 <br>
@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="form-label-group">
                                     <label for="height">Height in metres</label>
-                                    <input th:field="*{height}" type="number" step="0.1" id="height" name="height" class="form-control" placeholder="Height" required max="20">
+                                    <input th:field="*{height}" type="number" step="0.01" id="height" name="height" class="form-control" placeholder="Height" required max="20">
                                 </div>
 
                                 <br>
